@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="color-scheme" content="light dark">
+    <title>Menu {{ $canteen->name }}</title>
+
+    <!-- Anti-flash: apply .dark BEFORE first paint (full engine in theme.js via Vite) -->
+    <script>(function(){try{var v=localStorage.getItem('theme');var dark=(v==='dark')||(v!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',dark);document.documentElement.style.colorScheme=dark?'dark':'light';}catch(e){}}());</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/js/theme.js'])
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        page: 'var(--color-page)', surface: 'var(--color-surface)', line: 'var(--color-line)',
+                        'text-main': 'var(--color-text-main)', muted: 'var(--color-muted)', brand: 'var(--color-brand)',
+                        'on-brand': 'var(--color-on-brand)', 'accent-sage': 'var(--color-accent-sage)',
+                        'sage-tint': 'var(--color-sage-tint)', danger: 'var(--color-danger)', butter: 'var(--color-butter)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        :root {
+            --color-page: #F7F8F4; --color-surface: #FFFFFF; --color-line: #E3E8E1;
+            --color-text-main: #1E2A24; --color-muted: #78857D; --color-brand: #2F4A3A;
+            --color-on-brand: #FFFFFF; --color-accent-sage: #5B8C6B; --color-sage-tint: #E6EEE6;
+            --color-danger: #D64545; --color-butter: #F2C94C;
+        }
+        .dark {
+            --color-page: #111613; --color-surface: #1A221D; --color-line: #2A352E;
+            --color-text-main: #E8EDE9; --color-muted: #94A199; --color-brand: #86B896;
+            --color-on-brand: #0E1A12; --color-accent-sage: #86B896; --color-sage-tint: #1E2E22;
+            --color-danger: #F07575; --color-butter: #F2C94C;
+        }
+        *, *::before, *::after { transition-property: background-color, border-color, color; transition-duration: 150ms; transition-timing-function: ease; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-page font-sans antialiased min-h-screen text-text-main">
+    <div class="max-w-md mx-auto min-h-screen bg-page flex flex-col relative shadow-xl shadow-black/5 pb-28">
+
+        <!-- Header -->
+        <header class="sticky top-0 z-30 bg-surface border-b border-line px-4 py-3.5 shadow-xs">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] uppercase font-bold text-muted tracking-wider">Manajemen Menu</span>
+                    <h1 class="text-base font-extrabold text-text-main leading-tight">Menu {{ $canteen->name }}</h1>
+                </div>
+
+                <nav class="flex items-center gap-1.5">
+                    <a href="{{ route('admin.orders') }}" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-page text-text-main hover:bg-sage-tint border border-line transition">Pesanan</a>
+                    <a href="{{ route('admin.menu.index') }}" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-brand text-on-brand shadow-xs transition">Menu</a>
+                    <a href="{{ route('admin.profile') }}" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-page text-text-main hover:bg-sage-tint border border-line transition">Profil</a>
+
+                    <!-- Theme Switcher (plain JS, no Alpine dependency) -->
+                    <div class="relative" style="position:relative">
+                        <button type="button" data-theme-toggle aria-label="Ganti tema" style="position:relative;z-index:10;"
+                            class="flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-page border border-line hover:bg-sage-tint text-text-main transition">
+                            <svg class="theme-icon-sun w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                            <svg class="theme-icon-moon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        </button>
+                        <div class="theme-menu hidden absolute right-0 top-full mt-1 z-[200] bg-surface border border-line rounded-xl shadow-lg overflow-hidden min-w-[110px]">
+                            <button type="button" data-theme-choice="light" class="flex items-center justify-between w-full text-left px-3 py-2 text-xs text-text-main hover:bg-page transition"><span>Terang</span><svg class="theme-check w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" style="display:none"><polyline points="20 6 9 17 4 12"/></svg></button>
+                            <button type="button" data-theme-choice="auto"  class="flex items-center justify-between w-full text-left px-3 py-2 text-xs text-text-main hover:bg-page transition"><span>Otomatis</span><svg class="theme-check w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" style="display:none"><polyline points="20 6 9 17 4 12"/></svg></button>
+                            <button type="button" data-theme-choice="dark"  class="flex items-center justify-between w-full text-left px-3 py-2 text-xs text-text-main hover:bg-page transition"><span>Gelap</span><svg class="theme-check w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" style="display:none"><polyline points="20 6 9 17 4 12"/></svg></button>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('admin.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="p-1.5 rounded-xl text-muted hover:text-danger hover:bg-danger/10 transition" title="Keluar" aria-label="Logout">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Flash messages -->
+        @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" class="m-3 p-3 bg-sage-tint border border-line text-brand text-xs rounded-xl flex items-center justify-between">
+                <span>{{ session('success') }}</span>
+                <button @click="show = false" class="text-brand">&times;</button>
+            </div>
+        @endif
+
+        <!-- Menu Items List -->
+        <main class="p-4 space-y-3 flex-1">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-xs font-bold text-muted uppercase tracking-wider">Daftar Menu ({{ $menus->count() }})</span>
+                <span class="text-[11px] text-muted">Ketuk switch untuk toggle</span>
+            </div>
+
+            @forelse ($menus as $item)
+                <div
+                    x-data="{
+                        isAvailable: {{ $item->is_available ? 'true' : 'false' }},
+                        isUpdating: false,
+                        async toggle() {
+                            this.isUpdating = true;
+                            try {
+                                const res = await fetch('{{ route('admin.menu.toggle', $item->id) }}', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' }
+                                });
+                                const data = await res.json();
+                                if (data.success) { this.isAvailable = data.is_available; }
+                            } catch (e) {
+                                console.error('Error toggling menu availability:', e);
+                            } finally { this.isUpdating = false; }
+                        }
+                    }"
+                    class="bg-surface rounded-2xl border border-line p-3 shadow-xs space-y-3 transition"
+                    :class="!isAvailable ? 'opacity-60' : ''"
+                >
+                    <div class="flex items-start gap-3">
+                        <!-- Photo -->
+                        <div class="relative w-16 h-16 rounded-xl overflow-hidden bg-sage-tint flex-shrink-0">
+                            <img src="{{ $item->photo_url }}" alt="{{ $item->name }}" class="w-full h-full object-cover" :class="!isAvailable ? 'grayscale' : ''" loading="lazy" />
+                        </div>
+
+                        <!-- Info -->
+                        <div class="flex-1 min-w-0 pr-1">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-page text-muted border border-line">{{ $item->category }}</span>
+                                @if ($item->daily_stock !== null)
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold {{ $item->daily_stock <= 5 ? 'bg-butter/20 text-text-main border border-butter/40' : 'bg-page text-muted border border-line' }}">
+                                        Sisa {{ $item->daily_stock }}
+                                    </span>
+                                @endif
+                                @if ($item->isPromoActive())
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-butter/20 text-text-main border border-butter/40">
+                                        Promo aktif
+                                    </span>
+                                @endif
+                            </div>
+                            <h3 class="text-sm font-bold text-text-main leading-snug truncate mt-1">{{ $item->name }}</h3>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                @if ($item->isPromoActive())
+                                    <span class="text-xs font-extrabold text-brand">@rupiah($item->promo_price)</span>
+                                    <span class="text-[11px] text-muted line-through">@rupiah($item->price)</span>
+                                @else
+                                    <span class="text-xs font-extrabold text-brand">@rupiah($item->price)</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Toggle -->
+                        <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                            <span class="text-[10px] font-bold tracking-tight" :class="isAvailable ? 'text-accent-sage' : 'text-danger'" x-text="isAvailable ? 'Tersedia' : 'Habis'">
+                                {{ $item->is_available ? 'Tersedia' : 'Habis' }}
+                            </span>
+                            <button type="button" @click="toggle()" :disabled="isUpdating"
+                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
+                                :class="isAvailable ? 'bg-accent-sage' : 'bg-line'" role="switch" :aria-checked="isAvailable">
+                                <span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out" :class="isAvailable ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    @if ($item->description)
+                        <p class="text-xs text-muted line-clamp-1 border-t border-line pt-2">{{ $item->description }}</p>
+                    @endif
+
+                    <!-- Edit & Delete -->
+                    <div class="flex items-center justify-end gap-2 border-t border-line pt-2">
+                        <a href="{{ route('admin.menu.edit', $item->id) }}" class="px-2.5 py-1 text-xs font-semibold text-text-main bg-page hover:bg-sage-tint rounded-lg border border-line transition">
+                            ✏️ Edit
+                        </a>
+                        <form action="{{ route('admin.menu.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus menu \'{{ addslashes($item->name) }}\'?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-2.5 py-1 text-xs font-semibold text-danger bg-danger/10 hover:bg-danger/20 rounded-lg border border-danger/20 transition">
+                                🗑️ Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div class="py-16 text-center bg-surface rounded-3xl border border-line shadow-sm p-6 space-y-3">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-page flex items-center justify-center text-3xl">🍽️</div>
+                    <h3 class="text-sm font-bold text-text-main">Belum ada menu di kantin ini</h3>
+                    <p class="text-xs text-muted max-w-xs mx-auto">Mulai tambahkan menu lezat untuk kantin Anda dengan tombol di bawah.</p>
+                </div>
+            @endforelse
+        </main>
+
+        <!-- Floating "Tambah menu" Button -->
+        <div class="fixed bottom-6 right-0 left-0 z-40 px-4 pointer-events-none">
+            <div class="max-w-md mx-auto flex justify-end pointer-events-auto pr-2">
+                <a href="{{ route('admin.menu.create') }}"
+                    class="inline-flex items-center gap-2 px-5 py-3.5 bg-brand hover:opacity-90 active:scale-95 text-on-brand text-xs font-extrabold rounded-2xl shadow-xl transition">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>Tambah Menu</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

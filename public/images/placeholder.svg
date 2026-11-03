@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <rect width="800" height="500" fill="#E6EEE6"/>
+  <g fill="none" stroke="#5B8C6B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(360, 210) scale(1.6)">
+    <!-- Plate / Bowl -->
+    <path d="M4 18 C 4 34, 44 34, 44 18 Z" fill="#CBDBD0" stroke="#5B8C6B" stroke-width="3"/>
+    <!-- Steam waves -->
+    <path d="M16 10 C 16 6, 20 6, 20 2" stroke="#5B8C6B" stroke-width="2.5"/>
+    <path d="M24 10 C 24 6, 28 6, 28 2" stroke="#5B8C6B" stroke-width="2.5"/>
+    <path d="M32 10 C 32 6, 36 6, 36 2" stroke="#5B8C6B" stroke-width="2.5"/>
+  </g>
+  <text x="400" y="310" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="20" font-weight="600" fill="#78857D">Kantin Kampus</text>
+</svg>
+
